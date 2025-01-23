@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "formik": "^2.4.6",
+    "web-vitals": "^4.2.4"
+  }
+}

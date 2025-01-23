@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "web-vitals": "^4.2.4",
+    "yup": "^1.3.3",
+    "react-toastify": "^10.0.4",
+    "react-router-dom": "^6.22.0",
+    "formik": "^2.4.5"
+  }
+}
