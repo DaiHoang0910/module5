@@ -2,7 +2,7 @@ import {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Students extends Component {
-    render(){
+    render() {
         const students = [
             {id: 1, name: "Hoàng Văn A", age: 21, address: "Gia Lai"},
             {id: 2, name: "Hoàng Văn B", age: 21, address: "Đà Nẵng"},
@@ -24,12 +24,14 @@ class Students extends Component {
                     </thead>
                     <tbody>
                     {students.map(student => {
-                        return <tr>
+                        return (
+                        <tr key={student.id}>
                             <td>{student.id}</td>
                             <td>{student.name}</td>
                             <td>{student.age}</td>
                             <td>{student.address}</td>
                         </tr>
+                        );
                     })}
                     </tbody>
                 </table>
