@@ -1,0 +1,54 @@
+{
+  "books": [
+    {
+      "title": "Naruto",
+      "quantity": 30,
+      "id": 1
+    },
+    {
+      "id": 2,
+      "title": "One Piece",
+      "quantity": 40
+    },
+    {
+      "id": 3,
+      "title": "Attack on Titan",
+      "quantity": 30
+    },
+    {
+      "id": 4,
+      "title": "Dragon Ball",
+      "quantity": 60
+    },
+    {
+      "id": 5,
+      "title": "Death Note",
+      "quantity": 25
+    },
+    {
+      "id": 6,
+      "title": "My Hero Academia",
+      "quantity": 35
+    },
+    {
+      "id": 7,
+      "title": "Fullmetal Alchemist",
+      "quantity": 20
+    },
+    {
+      "id": 8,
+      "title": "Demon Slayer: Kimetsu no Yaiba",
+      "quantity": 45
+    },
+    {
+      "id": 9,
+      "title": "Bleach",
+      "quantity": 28
+    },
+    {
+      "id": 10,
+      "title": "Tokyo Ghoul",
+      "quantity": 18
+    }
+  ]
+}
