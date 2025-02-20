@@ -19,7 +19,7 @@ const App = () => {
                 <ToastContainer position="top-right" autoClose={3000} />
                 <Routes>
                     <Route path="/" element={<PostList posts={posts} onDelete={handleDeletePost} />} />
-                    <Route path="/add" element={<AddPost onAdd={handleAddPost} />} />
+                    <Route path="/add" element={<AddPost onAdd={handleAddPost} posts={posts} />} />
                     <Route path="/edit/:id" element={<EditPost posts={posts} onEdit={handleEditPost} />} />
                     <Route path="/view/:id" element={<ViewPost posts={posts} />} />
                 </Routes>

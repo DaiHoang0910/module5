@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Form, Button, Container } from "react-bootstrap";
 import ToastNotification from "../components/ToastNotification";
 
-const AddPost = ({ onAdd }) => {
+const AddPost = ({ onAdd, posts }) => {
     const [post, setPost] = useState({ title: "", category: "", content: "" });
     const navigate = useNavigate();
+
+    const categories = posts ? [...new Set(posts.map((post) => post.category))] : [];
 
     const handleChange = (e) => {
         setPost({ ...post, [e.target.name]: e.target.value });
@@ -46,14 +48,14 @@ const AddPost = ({ onAdd }) => {
 
                 <Form.Group className="mb-3">
                     <Form.Label>Category</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="category"
-                        value={post.category}
-                        onChange={handleChange}
-                        required
-                        placeholder="Enter category"
-                    />
+                    <Form.Select name="category" value={post.category} onChange={handleChange} required>
+                        <option value="">Select Category</option>
+                        {categories.map((category, index) => (
+                            <option key={index} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </Form.Select>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
@@ -69,9 +71,14 @@ const AddPost = ({ onAdd }) => {
                     />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
+                <div>
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button variant="secondary" className="ms-2" onClick={() => navigate("/")}>
+                        Return
+                    </Button>
+                </div>
             </Form>
         </Container>
     );

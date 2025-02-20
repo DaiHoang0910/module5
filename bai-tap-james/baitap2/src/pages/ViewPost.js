@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import {Button} from "react-bootstrap";
 
 const ViewPost = ({ posts }) => {
     const { id } = useParams();
@@ -10,9 +11,11 @@ const ViewPost = ({ posts }) => {
         <div>
             <h2>{post.title}</h2>
             <p>{post.content}</p>
-            <button className="btn btn-primary mt-3" onClick={() => navigate("/")}>
-                Return
-            </button>
+            <div>
+                <Button variant="secondary" onClick={() => navigate("/")}>
+                    Return
+                </Button>
+            </div>
         </div>
     ) : (
         <p>Post not found</p>

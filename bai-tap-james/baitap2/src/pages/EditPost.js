@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Form, Button, Container } from "react-bootstrap";
+import React, {useState} from "react";
+import {useParams, useNavigate} from "react-router-dom";
+import {Form, Button, Container} from "react-bootstrap";
 
-const EditPost = ({ posts, onEdit }) => {
-    const { id } = useParams();
+const EditPost = ({posts, onEdit}) => {
+    const {id} = useParams();
     const postToEdit = posts.find((p) => p.id === parseInt(id));
-    const [post, setPost] = useState(postToEdit || { title: "", category: "", content: "" });
+    const [post, setPost] = useState(postToEdit || {title: "", category: "", content: ""});
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setPost({ ...post, [e.target.name]: e.target.value });
+        setPost({...post, [e.target.name]: e.target.value});
     };
 
     const handleSubmit = (e) => {
@@ -66,10 +66,14 @@ const EditPost = ({ posts, onEdit }) => {
                         placeholder="Enter post content"
                     />
                 </Form.Group>
-
-                <Button variant="success" type="submit">
-                    Update
-                </Button>
+                <div>
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                    <Button variant="secondary" className="ms-2" onClick={() => navigate("/")}>
+                        Return
+                    </Button>
+                </div>
             </Form>
         </Container>
     );
