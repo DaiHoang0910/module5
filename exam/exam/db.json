@@ -1,0 +1,100 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Điện thoại"
+    },
+    {
+      "id": 2,
+      "name": "Laptop"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "code": "200",
+      "name": "Iphone X",
+      "price": "1000",
+      "categories": {
+        "id": 1,
+        "name": "Điện thoại"
+      },
+      "date": "2020-03-21",
+      "quantity": "1"
+    },
+    {
+      "id": 2,
+      "code": "201",
+      "name": "Samsung Note 10",
+      "price": "1200",
+      "categories": {
+        "id": 1,
+        "name": "Điện thoại"
+      },
+      "date": "2020-03-15",
+      "quantity": "2"
+    },
+    {
+      "id": 3,
+      "code": "202",
+      "name": "Dell Vostrol 5302",
+      "price": "400",
+      "categories": {
+        "id": 2,
+        "name": "Laptop"
+      },
+      "date": "2019-01-11",
+      "quantity": "3"
+    }
+  ],
+  "orders": [
+    {
+      "id": "6abc",
+      "orderId": "ORD-1738814074058",
+      "orderDate": "2003-10-09",
+      "products": [
+        {
+          "productName": "Iphone X",
+          "price": "1000",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "214d",
+      "orderId": "ORD-1738814142812",
+      "orderDate": "2003-10-09",
+      "products": [
+        {
+          "productName": "Iphone X",
+          "price": "1000",
+          "quantity": 4
+        }
+      ]
+    },
+    {
+      "id": "4a52",
+      "orderId": "ORD-1738814247243",
+      "orderDate": "2011-02-09",
+      "products": [
+        {
+          "productName": "Dell Vostrol 5302",
+          "price": "400",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "id": "7cff",
+      "orderId": "ORD-1738814416019",
+      "orderDate": "2025-02-04",
+      "products": [
+        {
+          "productName": "Samsung Note 10",
+          "price": "1200",
+          "quantity": 10
+        }
+      ]
+    }
+  ]
+}
