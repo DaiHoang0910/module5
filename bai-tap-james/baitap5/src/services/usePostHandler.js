@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {getPosts, addPost, deletePost, updatePost} from "./api"; // Đảm bảo đường dẫn đúng
+import {getPosts, addPost, deletePost, updatePost} from "./api";
 import ToastNotification from "../components/ToastNotification";
 
 const usePostHandler = () => {
@@ -37,7 +37,7 @@ const usePostHandler = () => {
                 id: (maxId + 1).toString(),
                 ...newPost,
                 updatedAt: getCurrentTimestamp(),
-                history: [] // Lưu lịch sử chỉnh sửa
+                history: []
             };
 
             await addPost(postWithTimestamp);
@@ -57,7 +57,6 @@ const usePostHandler = () => {
                 return;
             }
 
-            // Nếu bài viết chưa có lịch sử, tạo một mảng trống
             const updatedHistory = [
                 ...(postToUpdate.history || []),
                 {
@@ -69,9 +68,9 @@ const usePostHandler = () => {
             ];
 
             const postWithHistory = {
-                ...postToUpdate, // Giữ nguyên bài viết cũ
-                ...updatedPost,  // Cập nhật nội dung mới
-                history: updatedHistory, // Lưu lịch sử chỉnh sửa
+                ...postToUpdate,
+                ...updatedPost,
+                history: updatedHistory,
                 updatedAt: getCurrentTimestamp()
             };
 
