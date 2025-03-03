@@ -1,46 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Spinner } from "react-bootstrap";
-import { getPostById, updatePost, getPosts } from "../services/api";
+import usePostHandler from "../services/usePostHandler";
 import ToastNotification from "../components/ToastNotification";
 
 const EditPost = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const { posts, categories, updatePost } = usePostHandler();
+
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [categories, setCategories] = useState([]);
     const [newCategory, setNewCategory] = useState("");
     const [useNewCategory, setUseNewCategory] = useState(false);
 
     useEffect(() => {
-        fetchPost();
-        fetchCategories();
-    }, []);
-
-    const fetchPost = async () => {
-        try {
-            const response = await getPostById(id);
-            setPost(response.data);
-        } catch (error) {
-            console.error("Error fetching post:", error);
-            ToastNotification.error("Failed to load post!");
-            navigate("/");
-        } finally {
+        const existingPost = posts.find((p) => p.id === id);
+        if (existingPost) {
+            setPost(existingPost);
             setLoading(false);
+        } else {
+            setLoading(true);
         }
-    };
-
-    const fetchCategories = async () => {
-        try {
-            const response = await getPosts();
-            const uniqueCategories = [...new Set(response.data.map((post) => post.category))];
-            setCategories(uniqueCategories);
-        } catch (error) {
-            console.error("Error fetching categories:", error);
-        }
-    };
+    }, [id, posts]);
 
     const handleChange = (e) => {
         setPost({ ...post, [e.target.name]: e.target.value });
@@ -48,26 +31,20 @@ const EditPost = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!post.title || (!post.category && !newCategory) || !post.content) {
+        if (!post.title || (!post.categoryId && !newCategory) || !post.content) {
             ToastNotification.error("Please enter all required fields!");
             return;
         }
 
         const updatedPost = {
             ...post,
-            category: useNewCategory ? newCategory : post.category,
+            categoryId: useNewCategory ? newCategory : post.categoryId,
             slug: post.title.toLowerCase().replace(/\s+/g, "-"),
             updatedAt: new Date().toISOString(),
         };
 
-        try {
-            await updatePost(id, updatedPost);
-            ToastNotification.success("Post updated successfully!");
-            navigate("/");
-        } catch (error) {
-            console.error("Error updating post:", error);
-            ToastNotification.error("Failed to update post!");
-        }
+        await updatePost(id, updatedPost);
+        navigate("/");
     };
 
     if (loading) {
@@ -104,33 +81,18 @@ const EditPost = () => {
                         onChange={() => setUseNewCategory(false)}
                     />
                     <Form.Select
-                        name="category"
-                        value={post.category}
+                        name="categoryId"
+                        value={post.categoryId}
                         onChange={handleChange}
                         disabled={useNewCategory}
                         required
                     >
-                        {categories.map((category, index) => (
-                            <option key={index} value={category}>
-                                {category}
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
                             </option>
                         ))}
                     </Form.Select>
-
-                    <Form.Check
-                        type="radio"
-                        label="Enter new category"
-                        checked={useNewCategory}
-                        onChange={() => setUseNewCategory(true)}
-                    />
-                    <Form.Control
-                        type="text"
-                        value={newCategory}
-                        onChange={(e) => setNewCategory(e.target.value)}
-                        disabled={!useNewCategory}
-                        placeholder="Enter new category"
-                        required={useNewCategory}
-                    />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
@@ -159,9 +121,7 @@ const EditPost = () => {
     ) : (
         <Container className="text-center mt-4">
             <p>Post not found</p>
-            <Button variant="secondary" onClick={() => navigate("/")}>
-                Return
-            </Button>
+            <Button variant="secondary" onClick={() => navigate("/")}>Return</Button>
         </Container>
     );
 };

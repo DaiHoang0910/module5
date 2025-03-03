@@ -1,100 +1,65 @@
-import {useState, useEffect} from "react";
-import {getPosts, addPost, deletePost, updatePost} from "./api";
-import ToastNotification from "../components/ToastNotification";
+import { useState, useEffect } from "react";
+import { getPosts, deletePost, getCategories, createPost, updatePost as updatePostAPI } from "./api";
+import { toast } from "react-toastify";
 
 const usePostHandler = () => {
     const [posts, setPosts] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         fetchPosts();
+        fetchCategories();
     }, []);
-
-    const getCurrentTimestamp = () => {
-        return new Date().toISOString();
-    };
 
     const fetchPosts = async () => {
         try {
             const response = await getPosts();
             setPosts(response.data);
         } catch (error) {
-            console.error("Error fetching posts:", error);
-            ToastNotification.error("Failed to load posts!");
+            toast.error("Lỗi khi tải danh sách bài viết");
         }
     };
 
-    const handleAddPost = async (newPost) => {
+    const fetchCategories = async () => {
         try {
-            const response = await getPosts();
-            const existingPosts = response.data;
-
-            const maxId = existingPosts
-                .map((p) => parseInt(p.id))
-                .filter((id) => !isNaN(id))
-                .reduce((max, id) => (id > max ? id : max), 0);
-
-            const postWithTimestamp = {
-                id: (maxId + 1).toString(),
-                ...newPost,
-                updatedAt: getCurrentTimestamp(),
-                history: []
-            };
-
-            await addPost(postWithTimestamp);
-            ToastNotification.success(`Post: "${newPost.title}" - added successfully!`);
-            fetchPosts();
+            const response = await getCategories();
+            setCategories(response.data);
         } catch (error) {
-            console.error("Error adding post:", error);
-            ToastNotification.error("Failed to add post!");
+            toast.error("Lỗi khi tải danh mục");
         }
     };
 
-    const handleUpdatePost = async (id, updatedPost) => {
+    const addPost = async (newPost) => {
         try {
-            const postToUpdate = posts.find(post => post.id === id);
-            if (!postToUpdate) {
-                ToastNotification.error("Post not found!");
-                return;
-            }
-
-            const updatedHistory = [
-                ...(postToUpdate.history || []),
-                {
-                    previousTitle: postToUpdate.title,
-                    previousCategory: postToUpdate.category,
-                    previousContent: postToUpdate.content,
-                    updatedAt: getCurrentTimestamp()
-                }
-            ];
-
-            const postWithHistory = {
-                ...postToUpdate,
-                ...updatedPost,
-                history: updatedHistory,
-                updatedAt: getCurrentTimestamp()
-            };
-
-            await updatePost(id, postWithHistory);
-            ToastNotification.success("Post updated successfully!");
-            fetchPosts();
+            const response = await createPost(newPost);
+            setPosts([...posts, response.data]);
+            toast.success("Thêm bài viết thành công!");
         } catch (error) {
-            console.error("Error updating post:", error);
-            ToastNotification.error("Failed to update post!");
+            toast.error("Lỗi khi thêm bài viết!");
+        }
+    };
+
+    const updatePost = async (id, updatedPost) => {
+        try {
+            await updatePostAPI(id, updatedPost);
+            setPosts(posts.map((post) => (post.id === id ? updatedPost : post)));
+            toast.success("Cập nhật bài viết thành công!");
+        } catch (error) {
+            toast.error("Lỗi khi cập nhật bài viết!");
         }
     };
 
     const handleDeletePost = async (id) => {
         try {
             await deletePost(id);
-            ToastNotification.success("Post deleted successfully!");
-            fetchPosts();
+            setPosts(posts.filter((post) => post.id !== id));
+            toast.success("Xóa bài viết thành công!");
         } catch (error) {
-            console.error("Error deleting post:", error);
-            ToastNotification.error("Failed to delete post!");
+            toast.error("Lỗi khi xóa bài viết!");
         }
     };
 
-    return {posts, handleAddPost, handleDeletePost, handleUpdatePost};
+    return { posts, categories, addPost, updatePost, handleDeletePost };
 };
 
 export default usePostHandler;

@@ -12,7 +12,7 @@ import PostList from "./components/PostList";
 import usePostHandler from "./services/usePostHandler";
 
 const App = () => {
-    const { posts, handleAddPost, handleEditPost, handleDeletePost } = usePostHandler();
+    const { posts, handleAddPost, handleUpdatePost, handleDeletePost } = usePostHandler();
 
     return (
         <Router>
@@ -21,7 +21,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<PostList posts={posts} onDelete={handleDeletePost} />} />
                     <Route path="/add" element={<AddPost onAdd={handleAddPost} />} />
-                    <Route path="/edit/:id" element={<EditPost posts={posts} onEdit={handleEditPost} />} />
+                    <Route path="/edit/:id" element={<EditPost posts={posts} onEdit={handleUpdatePost} />} />
                     <Route path="/view/:id" element={<ViewPost posts={posts} />} />
                 </Routes>
             </div>
