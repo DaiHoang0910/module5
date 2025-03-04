@@ -1,56 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Table, Button, Form, Container } from "react-bootstrap";
-import ConfirmModal from "../components/ConfirmModal";
-import usePostHandler from "../services/usePostHandler";
+import useProductHandler from "../services/useProductHandler";
 
-const PostList = () => {
-    const { posts, categories, handleDeletePost } = usePostHandler();
-    const [showModal, setShowModal] = useState(false);
-    const [selectedPostId, setSelectedPostId] = useState(null);
-
-    const [searchTitle, setSearchTitle] = useState("");
+const ProductList = () => {
+    const { products, categories } = useProductHandler();
+    const [searchName, setSearchName] = useState("");
     const [searchCategory, setSearchCategory] = useState("");
-    const [searchDate, setSearchDate] = useState("");
-
     const [currentPage, setCurrentPage] = useState(1);
     const [pageInput, setPageInput] = useState("1");
-    const postsPerPage = 10;
+    const productsPerPage = 10;
 
-    const handleDelete = (id) => {
-        setSelectedPostId(id);
-        setShowModal(true);
-    };
-
-    const confirmDelete = async () => {
-        await handleDeletePost(selectedPostId);
-        setShowModal(false);
-    };
-
-    const filteredPosts = posts.filter((post) => {
-        const titleMatch = searchTitle
+    const filteredProducts = products.filter((product) => {
+        const nameMatch = searchName
             .trim()
             .toLowerCase()
             .split(" ")
-            .every(word => post.title.toLowerCase().includes(word));
+            .every(word => product.name.toLowerCase().includes(word));
 
-        const categoryMatch = searchCategory === "" || post.categoryId.toString() === searchCategory;
-        const dateMatch = searchDate === "" || new Date(post.updatedAt).toISOString().split("T")[0] === searchDate;
+        const categoryMatch = searchCategory === "" || product.categoryId.toString() === searchCategory;
 
-        return titleMatch && categoryMatch && dateMatch;
-    });
+        return nameMatch && categoryMatch;
+    }).sort((a, b) => a.quantity - b.quantity);
 
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
-    const totalPages = Math.ceil(filteredPosts.length / postsPerPage) || 1;
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage) || 1;
 
     useEffect(() => {
-        if (filteredPosts.length === 0) {
+        if (filteredProducts.length === 0) {
             setCurrentPage(1);
             setPageInput("1");
         }
-    }, [filteredPosts.length]);
+    }, [filteredProducts.length]);
 
     const handlePageChange = (e) => {
         const value = e.target.value;
@@ -76,14 +59,14 @@ const PostList = () => {
 
     return (
         <Container>
-            <h2 className="text-center">List Posts</h2>
+            <h2 className="text-center">List Products</h2>
 
             <Form className="mb-3 d-flex gap-2">
                 <Form.Control
                     type="text"
-                    placeholder="Search by title..."
-                    value={searchTitle}
-                    onChange={(e) => setSearchTitle(e.target.value)}
+                    placeholder="Search by name..."
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
                 />
                 <Form.Select value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)}>
                     <option value="">All Categories</option>
@@ -91,51 +74,42 @@ const PostList = () => {
                         <option key={category.id} value={category.id}>{category.name}</option>
                     ))}
                 </Form.Select>
-                <Form.Control
-                    type="date"
-                    value={searchDate}
-                    onChange={(e) => setSearchDate(e.target.value)}
-                />
                 <Button variant="secondary" onClick={() => {
-                    setSearchTitle("");
+                    setSearchName("");
                     setSearchCategory("");
-                    setSearchDate("");
                 }}>
                     Reset
                 </Button>
             </Form>
 
-            <Link to="/add" className="btn btn-primary mb-3">Add Post</Link>
-
             <Table striped bordered hover>
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Title</th>
+                    <th>Name</th>
                     <th>Category</th>
-                    <th>Updated At</th>
-                    <th className="text-center" colSpan={2}>Actions</th>
+                    <th>Quantity</th>
+                    <th>Date</th>
+                    <th className="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                {currentPosts.length > 0 ? (
-                    currentPosts.map((post) => (
-                        <tr key={post.id}>
-                            <td>{post.id}</td>
-                            <td><Link to={`/view/${post.id}`}>{post.title}</Link></td>
-                            <td>{categories.find(cat => cat.id.toString() === post.categoryId.toString())?.name || "Unknown"}</td>
-                            <td>{new Date(post.updatedAt).toISOString().split("T")[0]}</td>
+                {currentProducts.length > 0 ? (
+                    currentProducts.map((product) => (
+                        <tr key={product.id}>
+                            <td>{product.id}</td>
+                            <td>{product.name}</td>
+                            <td>{categories.find(cat => cat.id.toString() === product.categoryId.toString())?.name || "Unknown"}</td>
+                            <td>{product.quantity}</td>
+                            <td>{product.date}</td>
                             <td className="text-center">
-                                <Link to={`/edit/${post.id}`} className="btn btn-warning btn-sm me-2">Edit</Link>
-                            </td>
-                            <td className="text-center">
-                                <Button variant="danger" size="sm" onClick={() => handleDelete(post.id)}>Delete</Button>
+                                <Link to={`/edit/${product.id}`} className="btn btn-warning btn-sm">Update</Link>
                             </td>
                         </tr>
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="6" className="text-center">No matching posts found</td>
+                        <td colSpan="6" className="text-center">Không tìm thấy sản phẩm</td>
                     </tr>
                 )}
                 </tbody>
@@ -175,14 +149,8 @@ const PostList = () => {
                     ▶
                 </button>
             </div>
-
-            <ConfirmModal
-                show={showModal}
-                onHide={() => setShowModal(false)}
-                onConfirm={confirmDelete}
-            />
         </Container>
     );
 };
 
-export default PostList;
+export default ProductList;

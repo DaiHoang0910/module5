@@ -1,0 +1,95 @@
+{
+  "categories": [
+    {
+      "id": "1",
+      "name": "Shirts"
+    },
+    {
+      "id": "2",
+      "name": "Pants"
+    },
+    {
+      "id": "3",
+      "name": "Jackets"
+    }
+  ],
+  "product": [
+    {
+      "id": "1",
+      "name": "T-Shirt",
+      "date": "03/03/2025",
+      "quantity": "10",
+      "categoryId": "1"
+    },
+    {
+      "id": "2",
+      "name": "Polo Shirt",
+      "date": "03/03/2025",
+      "quantity": "15",
+      "categoryId": "1"
+    },
+    {
+      "id": "3",
+      "name": "Dress Shirt",
+      "date": "02/03/2025",
+      "quantity": "20",
+      "categoryId": "1"
+    },
+    {
+      "id": "4",
+      "name": "Jeans",
+      "date": "01/03/2025",
+      "quantity": "25",
+      "categoryId": "2"
+    },
+    {
+      "id": "5",
+      "name": "Chinos",
+      "date": "28/02/2025",
+      "quantity": "30",
+      "categoryId": "2"
+    },
+    {
+      "id": "6",
+      "name": "Sweatpants",
+      "date": "27/02/2025",
+      "quantity": "12",
+      "categoryId": "2"
+    },
+    {
+      "id": "7",
+      "name": "Shorts",
+      "date": "26/02/2025",
+      "quantity": "18",
+      "categoryId": "2"
+    },
+    {
+      "id": "8",
+      "name": "Leather Jacket",
+      "date": "25/02/2025",
+      "quantity": "12",
+      "categoryId": "3"
+    },
+    {
+      "id": "9",
+      "name": "Denim Jacket",
+      "date": "24/02/2025",
+      "quantity": "8",
+      "categoryId": "3"
+    },
+    {
+      "id": "10",
+      "name": "Windbreaker",
+      "date": "23/02/2025",
+      "quantity": "50",
+      "categoryId": "3"
+    },
+    {
+      "id": "11",
+      "name": "aaaaaaaa",
+      "categoryId": "1",
+      "quantity": "3",
+      "date": "03/03/2025"
+    }
+  ]
+}
