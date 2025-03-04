@@ -21,7 +21,7 @@ const ProductList = () => {
         const categoryMatch = searchCategory === "" || product.categoryId.toString() === searchCategory;
 
         return nameMatch && categoryMatch;
-    }).sort((a, b) => a.quantity - b.quantity);
+    }).sort((a, b) => b.quantity - a.quantity);
 
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
